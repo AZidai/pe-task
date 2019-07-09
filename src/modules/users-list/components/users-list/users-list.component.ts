@@ -15,6 +15,7 @@ export class UsersListComponent implements OnInit {
   displayedColumns = ['first_name', 'last_name', 'email'];
   userList: any[] = [];
   pagesCount: number;
+  currentPageIndex: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,20 +32,22 @@ export class UsersListComponent implements OnInit {
       this.userList = users;
     });
 
-    this.activatedRoute.data.pipe(
-      map(data => data.paginationInfo)
-    )
-    .subscribe(paginationInfo => {
-      this.pagesCount = paginationInfo.total;
-    });
+    this.setPaginationInfo();
+  }
+
+  setPaginationInfo() {
+    const pageInfo = this.apiService.fetchPaginationInfo();
+    this.pagesCount = parseInt(pageInfo.total, 10);
+    this.currentPageIndex = parseInt(pageInfo.page, 10) - 1;
   }
 
   pageChanged(event: PageEvent): void {
-    console.log('pageChanged', event.pageIndex + 1);
     const page: number = event.pageIndex + 1;
     this.apiService.fetchUsers(page).subscribe((users: UserInterface[]) => {
       this.userList = users;
+      this.setPaginationInfo();
     });
+
     this.router.navigate(['./'], { queryParams: { page } });
   }
 
