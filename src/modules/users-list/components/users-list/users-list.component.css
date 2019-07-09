@@ -1,0 +1,17 @@
+.user__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user__list-firstname {
+    cursor: pointer;
+}
+
+.user__list-firstname:hover {
+    color: blue;
+}
+
+.mat-header-cell {
+    padding: 0 10px;
+}

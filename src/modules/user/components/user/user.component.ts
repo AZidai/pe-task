@@ -24,8 +24,4 @@ export class UserComponent implements OnInit {
       this.user = user;
     });
   }
-
-  back(): void {
-    this.router.navigate(['./users']);
-  }
 }

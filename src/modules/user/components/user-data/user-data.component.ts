@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Optional } from '@angular/core';
+import { Component, Input, AfterViewInit, Optional } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserInterface } from '../../../../interfaces';
 import { UserComponent } from '../user/user.component';
 
@@ -7,15 +8,22 @@ import { UserComponent } from '../user/user.component';
   templateUrl: './user-data.component.html',
   styleUrls: ['./user-data.component.css']
 })
-export class UserDataComponent implements OnInit {
+export class UserDataComponent implements AfterViewInit {
 
   @Input() user: UserInterface;
 
-  constructor(@Optional() private parent: UserComponent) { }
+  constructor(
+    private router: Router,
+    @Optional() private parent: UserComponent
+  ) { }
 
-  ngOnInit() {
-    console.log(this.parent);
-    this.parent.user = { ...this.user };
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.parent.user = { ...this.user };
+    });
   }
 
+  back(): void {
+    this.router.navigate(['./users']);
+  }
 }
