@@ -12,9 +12,11 @@ export class UserComponent implements OnInit {
 
   user: UserInterface;
 
-  constructor(private apiService: ApiService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router) { }
+  constructor(
+    private apiService: ApiService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     const userId: number = this.activatedRoute.snapshot.params['id'];

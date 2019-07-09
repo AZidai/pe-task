@@ -2,24 +2,34 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserInterface } from '../../../interfaces';
-import { PaginationApiService } from './';
+import { UserInterface, PaginationInfoInterface } from '../../../interfaces';
+import { PaginationApiService } from './pagination-api.service';
 
 @Injectable()
 export class ApiService {
+
+  paginationInfo: PaginationInfoInterface;
 
   constructor(private http: Http, private paginationApiService: PaginationApiService) {
   }
 
   fetchUsers(page): Observable<any> {
-    return this.http.get('https://reqres.in/api/users?page=' + page).pipe(map(response => response.json().data));
+    return this.http.get('https://reqres.in/api/users?page=' + page)
+      .pipe(map(response =>  {
+        const result = response.json();
+        const pageInfo = this.paginationApiService.fetchPaginationInfo(result);
+        this.paginationInfo = pageInfo;
+        return result.data;
+      })
+    );
   }
 
-  fetchPaginationInfo(): Observable<any> {
-    return this.paginationApiService.fetchPaginationInfo();
+  fetchPaginationInfo() {
+    return this.paginationInfo;
   }
 
   fetchUserById(id: number): Observable<UserInterface> {
+    console.log('fetchUserById');
     return this.http.get(`https://reqres.in/api/users/${id}`).pipe(map(response => response.json()));
   }
 
